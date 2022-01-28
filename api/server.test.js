@@ -33,18 +33,28 @@ describe("POST /api/auth/register", () => {
 });
 
 describe("POST /api/auth/login", () => {
-  let res;
-  beforeEach(async () => {
-    res = await request(server)
-      .post("/api/auth/login")
-      .send({ username: "user", password: "password" });
-  });
+  describe("[3] user enters valid info", () => {
+    let res;
+    beforeEach(async () => {
+      res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "user", password: "password" });
+    });
 
-  test("[3] returns a status 200 OK", async () => {
-    expect(res.status).toBe(200);
+    test("[3A] returns a status 200 OK", async () => {
+      expect(res.status).toBe(200);
+    });
+    test("[3B] returns the correct welcome message", async () => {
+      expect(res.body.message).toBe("welcome, user");
+    });
   });
-  test("[4] returns the correct welcome message", async () => {
-    expect(res.body.message).toBe("welcome, user");
+  describe("[4] user enters invalid info", () => {
+    test("returns a status 401", async () => {
+      let res = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "wrong", password: "info" });
+      expect(res.status).toBe(401);
+    });
   });
 });
 
