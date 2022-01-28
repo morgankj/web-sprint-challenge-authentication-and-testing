@@ -36,7 +36,7 @@ describe("POST /api/auth/register", () => {
 });
 
 describe("POST /api/auth/login", () => {
-  let res
+  let res;
   beforeEach(async () => {
     res = await request(server)
       .post("/api/auth/login")
@@ -52,6 +52,15 @@ describe("POST /api/auth/login", () => {
 });
 
 describe("GET /api/jokes", () => {
-  test("", () => {});
-  test.todo("");
+  let res;
+  beforeEach(async () => {
+    res = await request(server).get("/api/jokes");
+  });
+
+  test("returns a status 401 if you aren't logged in", async () => {
+    expect(res.status).toBe(401);
+  });
+  test("returns correct error message on rejection", async () => {
+    expect(res.body.message).toBe("token required");
+  });
 });
