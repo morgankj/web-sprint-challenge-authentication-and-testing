@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
         next({ status: 401, message: "token invalid" });
       } else {
         req.decodedJwt = decoded;
+        next();
       }
     });
   }
