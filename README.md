@@ -28,9 +28,9 @@ We will hash the user's password using `bcryptjs`, and use JSON Web Tokens and t
 
 Your finished project must include all of the following requirements (further instructions are found inside each file):
 
-- [ ] An authentication workflow with functionality for account creation and login, implemented inside `api/auth/auth-router.js`.
-- [ ] Middleware used to restrict access to resources from non-authenticated requests, implemented inside `api/middleware/restricted.js`.
-- [ ] A minimum of 2 tests per API endpoint, written inside `api/server.test.js`.
+- [X] An authentication workflow with functionality for account creation and login, implemented inside `api/auth/auth-router.js`.
+- [X] Middleware used to restrict access to resources from non-authenticated requests, implemented inside `api/middleware/restricted.js`.
+- [X] A minimum of 2 tests per API endpoint, written inside `api/server.test.js`.
 
 **IMPORTANT Notes:**
 
@@ -44,16 +44,25 @@ Your finished project must include all of the following requirements (further in
 
 ## Submission format
 
-- [ ] Submit via Codegrade by pushing commits to your `main` branch on Github.
-- [ ] Check Codegrade before the deadline to compare its results against your local tests.
-- [ ] Check Codegrade on the days following the Sprint Challenge for reviewer feedback.
-- [ ] New commits will be evaluated by Codegrade if pushed _before_ the sprint challenge deadline.
+- [X] Submit via Codegrade by pushing commits to your `main` branch on Github.
+- [X] Check Codegrade before the deadline to compare its results against your local tests.
+- [X] Check Codegrade on the days following the Sprint Challenge for reviewer feedback.
+- [X] New commits will be evaluated by Codegrade if pushed _before_ the sprint challenge deadline.
 
 ## Interview Questions
 
 Be prepared to demonstrate your understanding of this week's concepts by answering questions on the following topics.
 
 1. Differences between using _sessions_ or _JSON Web Tokens_ for authentication.
+- JWTs are stored on the client side, while session uses server memory. Browsers will automatically send session/cookies, whereas JWTs need to be explicitly added to HTTP requests. JWTs also have no expiration date, while session cookies do.
+
 2. What does `bcryptjs` do to help us store passwords in a secure manner?
+- brcyptjs hashes user passwords before storing them in the database. It is an encryption module that uses an algorithm to scramble raw user passwords.
+
 3. How are unit tests different from integration and end-to-end testing?
+- unit tests are smaller, specific tests that focus on individual pieces of functionality (like functions, classes, or algorithms)
+- integration tests verify that pieces of your code work correctly _together_ and collaborate properly
+- end-to-end testing focuses on a complete flow through your application, simulating a full user experience
+
 4. How does _Test Driven Development_ change the way we write applications and tests?
+- TDD has the developer create testing code before actually fleshing out their application - it gives them a perspective that allows them to fully understand edge cases, MVP functionality and goals, and helps to minimize unexpected behaviors during the development process. It is an early investment in the dev process that helps to cut back on long-term troubleshooting throughout a project.
