@@ -2,10 +2,11 @@ const bcrypt = require("bcryptjs");
 const makeToken = require("./auth-token-builder");
 const router = require("express").Router();
 const User = require("../users/users-model");
+const { missingInfo, usernameUnique } = require('../middleware/auth-middleware');
 
 const { BCRYPT_ROUNDS } = require("../../config");
 
-router.post("/register", (req, res, next) => {
+router.post("/register", missingInfo, usernameUnique, (req, res, next) => {
   let user = req.body;
 
   const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS);
@@ -43,10 +44,10 @@ router.post("/register", (req, res, next) => {
   */
 });
 
-router.post("/login", (req, res, next) => {
+router.post("/login", missingInfo, (req, res, next) => {
   let { username, password } = req.body;
 
-  User.findByUsername(username)
+  User.findBy({ username })
     .then((user) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = makeToken(user);
