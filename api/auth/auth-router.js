@@ -1,10 +1,24 @@
-const router = require('express').Router();
+const bcrypt = require("bcryptjs");
+const makeToken = require("./auth-token-builder");
+const router = require("express").Router();
+const User = require("../users/users-model");
 
-router.post('/register', (req, res) => {
-  res.end('implement register, please!');
+const { BCRYPT_ROUNDS } = require("../../config");
+
+router.post("/register", (req, res, next) => {
+  let user = req.body;
+
+  const hash = bcrypt.hashSync(user.password, BCRYPT_ROUNDS);
+  user.password = hash;
+
+  User.add(user)
+    .then((user) => {
+      res.status(201).json(user);
+    })
+    .catch(next);
   /*
     IMPLEMENT
-    You are welcome to build additional middlewares to help with the endpoint's functionality.
+    You are welcome to build additional middleware to help with the endpoint's functionality.
     DO NOT EXCEED 2^8 ROUNDS OF HASHING!
 
     1- In order to register a new account the client must provide `username` and `password`:
@@ -29,11 +43,22 @@ router.post('/register', (req, res) => {
   */
 });
 
-router.post('/login', (req, res) => {
-  res.end('implement login, please!');
+router.post("/login", (req, res, next) => {
+  let { username, password } = req.body;
+
+  User.findByUsername(username)
+    .then((user) => {
+      if (user && bcrypt.compareSync(password, user.password)) {
+        const token = makeToken(user);
+        res.status(200).json({ message: `welcome, ${username}`, token });
+      } else {
+        next({ status: 401, message: "invalid credentials" });
+      }
+    })
+    .catch(next);
   /*
     IMPLEMENT
-    You are welcome to build additional middlewares to help with the endpoint's functionality.
+    You are welcome to build additional middleware to help with the endpoint's functionality.
 
     1- In order to log into an existing account the client must provide `username` and `password`:
       {
